@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="application/javascript">
+    var x = 150; // Ball's initial x position
+    var y = 150; // Ball's initial y position
+    var dx = 2;  // Ball's horizontal speed
+    var dy = 4;  // Ball's vertical speed
+    var r = 10;  // Ball's radius
+    var WIDTH = 300;
+    var HEIGHT = 300;
+    var ctx;
+    var paddlex;
+    var paddleh;
+    var paddlew;
+    var intervalId;
+    var rightDown = false;
+    var leftDown = false;
+
+    // Initialize the game
+    function init() {
+      var canvas = $('#canvas')[0];
+      ctx = canvas.getContext("2d");
+      WIDTH = $("#canvas").width();
+      HEIGHT = $("#canvas").height();
+      init_paddle();
+      intervalId = setInterval(draw, 10); // Start the animation loop
+    }
+
+    // Create a circle (ball)
+    function circle(x, y, r) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Create a rectangle (paddle)
+    function rect(x, y, w, h) {
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Clear the canvas
+    function clear() {
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    }
+
+    // Initialize the paddle
+    function init_paddle() {
+      paddlex = WIDTH / 2 - 37.5;  // Center the paddle
+      paddleh = 10;  // Paddle height
+      paddlew = 75;  // Paddle width
+    }
+
+    // Handle keydown events
+    function onKeyDown(evt) {
+      if (evt.keyCode == 39) rightDown = true;  // Right arrow
+      else if (evt.keyCode == 37) leftDown = true;  // Left arrow
+    }
+
+    // Handle keyup events
+    function onKeyUp(evt) {
+      if (evt.keyCode == 39) rightDown = false;  // Right arrow
+      else if (evt.keyCode == 37) leftDown = false;  // Left arrow
+    }
+
+    $(document).keydown(onKeyDown);
+    $(document).keyup(onKeyUp);
+
+    // Draw everything (ball, paddle, and handle movement)
+    function draw() {
+      clear();
+      circle(x, y, r);  // Draw the ball
+      // Paddle movement (ensure it stays within the canvas)
+      if (rightDown && paddlex < WIDTH - paddlew) paddlex += 5;
+      if (leftDown && paddlex > 0) paddlex -= 5;
+      rect(paddlex, HEIGHT - paddleh, paddlew, paddleh);  // Draw the paddle
+
+      // Ball collision with walls
+      if (x + dx > WIDTH - r || x + dx < r) {
+        dx = -dx;  // Reverse direction horizontally
+      }
+
+      if (y + dy < r) {
+        dy = -dy;  // Reverse direction vertically when hitting top
+      } else if (y + dy > HEIGHT - r) {
+        // Ball hits bottom
+        if (x > paddlex && x < paddlex + paddlew) {
+          dy = -dy;  // Bounce back when hitting the paddle
+        } else {
+          clearInterval(intervalId);  // Stop the game when the ball misses the paddle
+          alert("Game Over! The ball fell off the screen.");
+        }
+      }
+
+      // Update ball position
+      x += dx;
+      y += dy;
+    }
+
+    $(document).ready(function() {
+      init();  // Initialize the game
+    });
+  </script>
+</head>
+<body>
+  <canvas id="canvas" width="300" height="300"></canvas>
+</body>
+</html>
