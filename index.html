@@ -1,14 +1,26 @@
 <!DOCTYPE html>
- <html lang="en">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Preprost Pong</title>
-   <link rel="stylesheet" href="style.css">
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script src="script.js" defer></script>
- </head>
- <body>
-   <canvas id="canvas" width="300" height="300"></canvas>
- </body>
- </html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preprost Pong</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Background video -->
+  <video id="bgVideo" autoplay loop muted>
+    <source src="bg.mp4" type="video/mp4">
+  </video>
+
+  <!-- Canvas element for the game -->
+  <canvas id="canvas" width="600" height="600"></canvas>
+
+  <!-- Play Button -->
+  <button id="playButton">Play</button>
+
+  <!-- Game Over message -->
+  <div id="gameMessage" class="game-message"></div>
+</body>
+</html>
