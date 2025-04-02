@@ -1,26 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Preprost Pong</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="fave.jpg" type="image/jpeg">
+    <title>The hacked bricks</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Background layer */
+        }
+        #gameCanvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            border: 2px solid white;
+        }
+        #playButton {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background-color: #00ff00; /* Neon green */
+            color: #000;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body>
-  <!-- Background video -->
-  <video id="bgVideo" autoplay loop muted>
-    <source src="bg.mp4" type="video/mp4">
-  </video>
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrixCanvas"></canvas>
 
-  <!-- Canvas element for the game -->
-  <canvas id="canvas" width="600" height="600"></canvas>
+  <!-- Game Canvas -->
+  <canvas id="gameCanvas" width="600" height="600"></canvas>
 
   <!-- Play Button -->
   <button id="playButton">Play</button>
 
   <!-- Game Over message -->
   <div id="gameMessage" class="game-message"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>

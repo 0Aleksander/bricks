@@ -1,41 +1,72 @@
-var x = 150; // Starting position of the ball (x)
-var y = 150; // Starting position of the ball (y)
-var dx = 2;  // Ball speed on the x-axis
-var dy = 4;  // Ball speed on the y-axis
-var r = 10;  // Ball radius
-var WIDTH = 300;
-var HEIGHT = 300;
-var ctx;
-var paddlex;
-var paddleh = 10;
-var paddlew = 75;
-var intervalId;
-var rightDown = false;
-var leftDown = false;
+// Matrix Background Effect (unchanged)
+const state = {
+  fps: 20,
+  color: "#00ff00",
+  charset: "01",
+  size: 25
+};
 
-// Variables for bricks
-var bricks;
-var NROWS;
-var NCOLS;
-var BRICKWIDTH;
-var BRICKHEIGHT;
-var PADDING;
+const matrixCanvas = document.getElementById("matrixCanvas");
+const matrixCtx = matrixCanvas.getContext("2d");
 
-// Additional variable for paddle collision margin
-var f = 5; // Used in checking paddle-ball collision
+let w, h, p;
+const resize = () => {
+  w = matrixCanvas.width = innerWidth;
+  h = matrixCanvas.height = innerHeight;
+  p = Array(Math.ceil(w / state.size)).fill(0);
+};
+window.addEventListener("resize", resize);
+resize();
 
-// Initialize the game
+const random = (items) => items[Math.floor(Math.random() * items.length)];
+
+const drawMatrix = () => {
+  matrixCtx.fillStyle = "rgba(0,0,0,.05)";
+  matrixCtx.fillRect(0, 0, w, h);
+  matrixCtx.fillStyle = state.color;
+  matrixCtx.font = state.size + "px monospace";
+  
+  for (let i = 0; i < p.length; i++) {
+    let v = p[i];
+    matrixCtx.fillText(random(state.charset), i * state.size, v);
+    p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + state.size;
+  }
+};
+
+setInterval(drawMatrix, 1000 / state.fps);
+
+// Pong/Breakout Game Code
+var x, y, dx, dy, r, WIDTH, HEIGHT, ctx, paddlex, paddleh, paddlew, intervalId;
+var rightDown = false, leftDown = false, bricks, NROWS, NCOLS, BRICKWIDTH, BRICKHEIGHT, PADDING, f = 5;
+
 function init() {
-  var canvas = $('#canvas')[0];
+  var canvas = document.getElementById("gameCanvas");
   ctx = canvas.getContext("2d");
-  WIDTH = $("#canvas").width();
-  HEIGHT = $("#canvas").height();
+  WIDTH = canvas.width;
+  HEIGHT = canvas.height;
+  
+  // Reset game state
+  x = WIDTH / 2;
+  y = HEIGHT / 2;
+  dx = 2;
+  dy = 4;
+  r = 10;
+  paddleh = 10;
+  paddlew = 75;
+  
   init_paddle();
   initbricks();
+  
+  // Clear any existing interval
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
   intervalId = setInterval(draw, 10);
+  
+  // Hide game over message
+  document.getElementById("gameMessage").style.display = "none";
 }
 
-// Initialize bricks
 function initbricks() {
   NROWS = 5;
   NCOLS = 5;
@@ -44,142 +75,134 @@ function initbricks() {
   PADDING = 1;
   bricks = new Array(NROWS);
   for (var i = 0; i < NROWS; i++) {
-    bricks[i] = new Array(NCOLS);
-    for (var j = 0; j < NCOLS; j++) {
-      bricks[i][j] = 1; // Brick is present (1 means it hasn't been hit yet)
-    }
+    bricks[i] = new Array(NCOLS).fill(1);
   }
 }
 
-// Draw circle (ball)
 function circle(x, y, r) {
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2, true);
   ctx.closePath();
-  
-  // Set ball color (neon green in this example)
-  ctx.fillStyle = "#00ff00"; // Neon Green color
-  
-  // Set up the glow effect
-  ctx.shadowColor = "#00ff00";  // Glow color (same as the ball color)
-  ctx.shadowBlur = 20;  // The blur radius, larger values for a more pronounced glow
-  ctx.shadowOffsetX = 0;  // Horizontal shadow offset (set to 0 for centered glow)
-  ctx.shadowOffsetY = 0;  // Vertical shadow offset (set to 0 for centered glow)
-
-  ctx.fill();  // Fill the ball with the chosen color
+  ctx.fillStyle = "#00ff00";
+  ctx.shadowColor = "#00ff00";
+  ctx.shadowBlur = 20;
+  ctx.fill();
 }
 
-// Draw rectangle (paddle and bricks)
 function rect(x, y, w, h) {
   ctx.beginPath();
   ctx.rect(x, y, w, h);
   ctx.closePath();
+  ctx.fillStyle = "#00ff00";
+  ctx.shadowColor = "#00ff00";
+  ctx.shadowBlur = 10;
   ctx.fill();
 }
 
-// Clear the canvas
 function clear() {
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
-// Initialize paddle
 function init_paddle() {
   paddlex = WIDTH / 2 - paddlew / 2;
 }
 
-// Handle key down events
 function onKeyDown(evt) {
-  if (evt.keyCode == 39) rightDown = true; // Right arrow
-  else if (evt.keyCode == 37) leftDown = true; // Left arrow
+  if (evt.keyCode == 39) rightDown = true;
+  else if (evt.keyCode == 37) leftDown = true;
 }
 
-// Handle key up events
 function onKeyUp(evt) {
   if (evt.keyCode == 39) rightDown = false;
   else if (evt.keyCode == 37) leftDown = false;
 }
 
-$(document).keydown(onKeyDown);
-$(document).keyup(onKeyUp);
+document.addEventListener("keydown", onKeyDown);
+document.addEventListener("keyup", onKeyUp);
 
-// Main drawing function
 function draw() {
   clear();
-  circle(x, y, 10);
+  circle(x, y, r);
 
-  // Move the paddle left or right
-  if (rightDown) {
-    if ((paddlex + paddlew) < WIDTH) {
-      paddlex += 5;
-    } else {
-      paddlex = WIDTH - paddlew;
-    }
-  } else if (leftDown) {
-    if (paddlex > 0) {
-      paddlex -= 5;
-    } else {
-      paddlex = 0;
-    }
+  // Move paddle
+  if (rightDown && paddlex + paddlew < WIDTH) {
+    paddlex += 5;
+  } else if (leftDown && paddlex > 0) {
+    paddlex -= 5;
   }
 
+  // Draw paddle
   rect(paddlex, HEIGHT - paddleh, paddlew, paddleh);
 
   // Draw bricks
   for (var i = 0; i < NROWS; i++) {
     for (var j = 0; j < NCOLS; j++) {
       if (bricks[i][j] == 1) {
-        rect((j * (BRICKWIDTH + PADDING)) + PADDING,
-             (i * (BRICKHEIGHT + PADDING)) + PADDING,
-             BRICKWIDTH, BRICKHEIGHT);
+        rect(
+          j * (BRICKWIDTH + PADDING) + PADDING,
+          i * (BRICKHEIGHT + PADDING) + PADDING,
+          BRICKWIDTH,
+          BRICKHEIGHT
+        );
       }
     }
   }
 
-  // Ball collision with walls
+  // Wall collisions
   if (x + dx > WIDTH - r || x + dx < r) {
     dx = -dx;
   }
   if (y + dy < r) {
     dy = -dy;
-  } else if (y + dy > HEIGHT - (r + f)) {
-    if (x > paddlex && x < paddlex + paddlew) {
-      dy = -dy;
-    } else if (y + dy > HEIGHT - r) {
-      clearInterval(intervalId); // Stop the game if the ball falls
+  }
+
+  // Paddle collision
+  if (y + dy > HEIGHT - r - paddleh && x > paddlex && x < paddlex + paddlew) {
+    dy = -dy;
+  }
+
+  // Bottom collision (game over)
+  if (y + dy > HEIGHT - r) {
+    if (!(x > paddlex && x < paddlex + paddlew)) {
+      clearInterval(intervalId);
       showGameOver();
+      return;
     }
+  }
+
+  // Brick collisions
+  var rowheight = BRICKHEIGHT + PADDING;
+  var colwidth = BRICKWIDTH + PADDING;
+  var row = Math.floor(y / rowheight);
+  var col = Math.floor(x / colwidth);
+
+  if (y < NROWS * rowheight && row >= 0 && col >= 0 && bricks[row][col] == 1) {
+    dy = -dy;
+    bricks[row][col] = 0;
   }
 
   // Update ball position
   x += dx;
   y += dy;
-
-  // Brick collision detection
-  rowheight = BRICKHEIGHT + PADDING + f / 2; // Brick height plus padding
-  colwidth = BRICKWIDTH + PADDING + f / 2; // Brick width plus padding
-  row = Math.floor(y / rowheight);
-  col = Math.floor(x / colwidth);
-
-  if (y < NROWS * rowheight && row >= 0 && col >= 0 && bricks[row][col] == 1) {
-    dy = -dy; 
-    bricks[row][col] = 0; // Mark the brick as hit (destroyed)
-  }
 }
 
-// Show Game Over screen
 function showGameOver() {
-  var gameMessage = document.getElementById('gameMessage');
-  gameMessage.textContent = 'Game Over!';
-  gameMessage.classList.add('game-over');
-  gameMessage.style.display = 'block'; // Show the game over message
+  var gameMessage = document.getElementById("gameMessage");
+  gameMessage.textContent = "GAME OVER";
+  gameMessage.style.display = "block";
+  document.getElementById("playButton").style.display = "block";
 }
 
-// Handle Play button click
 function startGame() {
-  document.getElementById('playButton').style.display = 'none'; // Hide the Play button
-  init(); // Initialize the game
-  $('#gameMessage').hide(); // Hide any previous game message
+  document.getElementById("playButton").style.display = "none";
+  init();
 }
 
-// When the Play button is clicked, start the game
-document.getElementById('playButton').addEventListener('click', startGame);
+// Initialize the game
+document.getElementById("playButton").addEventListener("click", startGame);
+
+// Make body visible after load
+window.addEventListener("load", function() {
+  document.body.style.visibility = "visible";
+  document.getElementById("playButton").style.display = "block";
+});
