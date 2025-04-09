@@ -164,9 +164,9 @@ function draw() {
   // Bottom collision (game over)
   if (y + dy > HEIGHT - r) {
     if (!(x > paddlex && x < paddlex + paddlew)) {
-      clearInterval(intervalId);
-      showGameOver();
-      return;
+      clearInterval(intervalId);  // Stop the game loop
+      showGameOver();  // Show SweetAlert Game Over message
+      return;  // Exit the draw function
     }
   }
 
@@ -187,15 +187,22 @@ function draw() {
 }
 
 function showGameOver() {
-  var gameMessage = document.getElementById("gameMessage");
-  gameMessage.textContent = "GAME OVER";
-  gameMessage.style.display = "block";
-  document.getElementById("playButton").style.display = "block";
+  // SweetAlert popup for Game Over
+  Swal.fire({
+    title: 'Game Over!',
+    text: 'You lost the game!',
+    icon: 'error',
+    confirmButtonText: 'Play Again'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      startGame(); // Restart game if the player presses "Play Again"
+    }
+  });
 }
 
 function startGame() {
-  document.getElementById("playButton").style.display = "none";
-  init();
+  document.getElementById("playButton").style.display = "none";  // Hide play button
+  init();  // Initialize game
 }
 
 // Initialize the game

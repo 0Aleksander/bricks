@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="fave.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.all.min.js"></script>
     <title>The hacked bricks</title>
     <style>
         body {
@@ -28,11 +30,28 @@
         }
         #playButton {
             position: absolute;
-            bottom: 15%;
-            left: 50%;
+            bottom: 10%;
+            left: 48%;
             transform: translateX(-50%);
             padding: 15px 30px;
             background-color: #00ff00; /* Neon green */
+            color: #000;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            z-index: 2;
+        }
+        /* New style for the info button */
+        #infoButton {
+            position: absolute;
+            bottom: 10%;
+            left: 49%;
+            transform: translateX(50%); /* Shift to the right of the play button */
+            padding: 15px 30px;
+            background-color: #00ff00; /* Neon blue */
             color: #000;
             font-size: 20px;
             font-weight: bold;
@@ -53,6 +72,9 @@
 
   <!-- Play Button -->
   <button id="playButton">Play</button>
+
+  <!-- Info Button -->
+  <button id="infoButton">Info</button>
 
   <!-- Game Over message -->
   <div id="gameMessage" class="game-message"></div>
