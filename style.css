@@ -1,78 +1,42 @@
-/* Reset body margin and padding */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: black; /* Ensures the page background is black initially */
-}
-
-/* Hide the body content initially to prevent a flash */
 body {
-  visibility: hidden;  /* Hide the body content initially */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* Fullscreen Matrix Background */
-#matrixCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Keeps it behind other elements */
-}
-
-/* Game Canvas */
-#gameCanvas {
-  display: block;
-  background-color: #111; /* Dark background for visibility */
-  border: 2px solid #00ff00; /* Neon green border */
-  box-shadow: 0 0 20px rgba(0, 255, 0, 0.8); /* Glowing effect */
-  position: relative;
-  z-index: 1; /* Ensure it's above the matrix background */
-}
-
-/* Play Button */
-#playButton {
-  position: absolute;
-  top: calc(100% - 80px); /* Position it 80px above the bottom */
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 15px 30px;
-  background-color: #00ff00; /* Neon green */
-  color: #000;
-  font-size: 20px;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.1s;
-  z-index: 2;
-}
-
-#playButton:hover {
-  background-color: #00cc00; /* Slightly darker green on hover */
-  transform: scale(1.05);
-}
-
-/* Game Over Message */
-.game-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 40px;
-  color: #ff0000;
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-  display: none;
-  z-index: 3;
-}
-
-.game-over {
-  display: block;
-}
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: black;
+    visibility: hidden; /* To be made visible on load */
+    font-family: 'Courier New', monospace;
+  }
+  
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+  }
+  
+  #matrixCanvas {
+    z-index: -1;
+  }
+  
+  #gameCanvas {
+    z-index: 1;
+  }
+  
+  #playButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    background-color: #00ff00;
+    color: black;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 2;
+    display: none;
+    box-shadow: 0 0 20px #00ff00;
+  }
+  

@@ -1,84 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="fave.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.all.min.js"></script>
-    <title>The hacked bricks</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; /* Background layer */
-        }
-        #gameCanvas {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-            border: 2px solid white;
-        }
-        #playButton {
-            position: absolute;
-            bottom: 10%;
-            left: 48%;
-            transform: translateX(-50%);
-            padding: 15px 30px;
-            background-color: #00ff00; /* Neon green */
-            color: #000;
-            font-size: 20px;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            z-index: 2;
-        }
-        /* New style for the info button */
-        #infoButton {
-            position: absolute;
-            bottom: 10%;
-            left: 49%;
-            transform: translateX(50%); /* Shift to the right of the play button */
-            padding: 15px 30px;
-            background-color: #00ff00; /* Neon blue */
-            color: #000;
-            font-size: 20px;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            z-index: 2;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrix Brick Breaker</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <!-- Matrix Background Canvas -->
+
+  <!-- Matrix Background -->
   <canvas id="matrixCanvas"></canvas>
 
-  <!-- Game Canvas -->
-  <canvas id="gameCanvas" width="600" height="600"></canvas>
+  <!-- Brick Breaker Game -->
+  <canvas id="gameCanvas"></canvas>
 
-  <!-- Play Button -->
-  <button id="playButton">Play</button>
+  <!-- UI Elements -->
+  <button id="playButton">Play Game</button>
 
-  <!-- Info Button -->
-  <button id="infoButton">Info</button>
-
-  <!-- Game Over message -->
-  <div id="gameMessage" class="game-message"></div>
-
-  <script src="script.js"></script>
+  <!-- Scripts -->
+  <script src="script.js"></script> <!-- Matrix -->
+  <script src="game.js"></script>   <!-- Game -->
 </body>
 </html>
