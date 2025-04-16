@@ -1,42 +1,44 @@
 body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: black;
-    visibility: hidden; /* To be made visible on load */
-    font-family: 'Courier New', monospace;
-  }
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
+  visibility: hidden; /* To be made visible on load */
+  font-family: 'Courier New', monospace;
+  display: flex;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center;     /* Centers content vertically */
+  height: 100vh;           /* Takes full viewport height */
+}
+
+canvas {
+  position: absolute;
+  display: block;
   
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-  }
-  
-  #matrixCanvas {
-    z-index: -1;
-  }
-  
-  #gameCanvas {
-    z-index: 1;
-  }
-  
-  #playButton {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 15px 30px;
-    font-size: 18px;
-    border: none;
-    background-color: #00ff00;
-    color: black;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    z-index: 2;
-    display: none;
-    box-shadow: 0 0 20px #00ff00;
-  }
-  
+}
+
+#matrixCanvas {
+  z-index: -1;
+}
+
+#gameCanvas {
+  z-index: 1;
+}
+
+#playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  background-color: #00ff00;
+  color: black;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 2;
+  display: none;
+  box-shadow: 0 0 20px #00ff00;
+}
