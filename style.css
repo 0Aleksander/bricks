@@ -14,7 +14,6 @@ body {
 canvas {
   position: absolute;
   display: block;
-  
 }
 
 #matrixCanvas {
@@ -41,4 +40,52 @@ canvas {
   z-index: 2;
   display: none;
   box-shadow: 0 0 20px #00ff00;
+}
+
+/* Flashy and Stylish Game Title */
+#gameTitle {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  text-shadow:
+    0 0 5px #00ff00,
+    0 0 10px #00ff00,
+    0 0 20px #00ff00,
+    0 0 40px #00ff00;
+  animation: pulseGlow 2s infinite ease-in-out;
+  z-index: 3;
+  user-select: none;
+  letter-spacing: 4px;
+}
+
+@keyframes pulseGlow {
+  0% {
+    text-shadow:
+      0 0 5px #00ff00,
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
+      0 0 40px #00ff00;
+    transform: scale(1);
+  }
+  50% {
+    text-shadow:
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
+      0 0 40px #00ff00,
+      0 0 80px #00ff00;
+    transform: scale(1.05);
+  }
+  100% {
+    text-shadow:
+      0 0 5px #00ff00,
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
+      0 0 40px #00ff00;
+    transform: scale(1);
+  }
 }
