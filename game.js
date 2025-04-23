@@ -3,6 +3,7 @@ var rightDown = false, leftDown = false, bricks, NROWS, NCOLS, BRICKWIDTH, BRICK
 var score = 0;
 var startTime;
 var timerInterval;
+var lives = 3;
 
 function init() {
   var canvas = document.getElementById("gameCanvas");
@@ -16,17 +17,16 @@ function init() {
   dy = 4;
   r = 10;
   paddleh = 10;
-  paddlew = 75;
+  paddlew = 100; // Initial paddle width
 
   init_paddle();
   initbricks();
 
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
+  if (intervalId) clearInterval(intervalId);
   intervalId = setInterval(draw, 10);
 
   score = 0;
+  lives = 3;
   startTime = Date.now();
   document.getElementById("score").innerText = "Score: 0";
   document.getElementById("timer").innerText = "Time: 0s";
@@ -122,10 +122,18 @@ function draw() {
   if (x + dx > WIDTH - r || x + dx < r) dx = -dx;
   if (y + dy < r) dy = -dy;
 
-  if (y + dy > HEIGHT - r - paddleh && x > paddlex && x < paddlex + paddlew) dy = -dy;
-
-  if (y + dy > HEIGHT - r) {
-    if (!(x > paddlex && x < paddlex + paddlew)) {
+  if (y + dy > HEIGHT - r - paddleh && x > paddlex && x < paddlex + paddlew) {
+    dy = -dy;
+  } else if (y + dy > HEIGHT - r) {
+    lives--;
+    if (lives > 0) {
+      paddlew -= 15;
+      init_paddle();
+      x = WIDTH / 2;
+      y = HEIGHT / 2;
+      dx = 2;
+      dy = 4;
+    } else {
       clearInterval(intervalId);
       clearInterval(timerInterval);
       showGameOver();
@@ -152,9 +160,10 @@ function draw() {
 function showGameOver() {
   Swal.fire({
     title: 'Game Over!',
-    text: 'You lost the game!',
+    text: `You lost all lives. Final Score: ${score}`,
     icon: 'error',
-    confirmButtonText: 'Play Again'
+    confirmButtonText: 'Play Again',
+    confirmButtonColor: '#00ff00'
   }).then((result) => {
     if (result.isConfirmed) {
       startGame();

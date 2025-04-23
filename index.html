@@ -9,17 +9,22 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-
-  <!-- Flashy Game Title -->
-  <h1 id="gameTitle">THE BINARY BRICKS</h1>
-
   <!-- Matrix Background -->
   <canvas id="matrixCanvas"></canvas>
+
+  <!-- UI Elements -->
+  <div class="ui-container">
+    <h1 id="title">THE BINARY BRICKS</h1>
+    <div class="status-bar">
+      <span id="score">Score: 0</span>
+      <span id="timer">Time: 0s</span>
+    </div>
+  </div>
 
   <!-- Brick Breaker Game -->
   <canvas id="gameCanvas" width="500" height="500"></canvas>
 
-  <!-- UI Elements -->
+  <!-- Play Button -->
   <button id="playButton">Play Game</button>
 
   <!-- Scripts -->
